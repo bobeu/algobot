@@ -3,7 +3,7 @@
 
 import logging
 from algosdk import account, mnemonic
-from connection import algod_client
+from algosdk.v2client import algod
 from telegram import (ReplyKeyboardMarkup, InlineKeyboardButton,  InlineKeyboardMarkup)
 import time
 import os
@@ -23,15 +23,30 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-PORT = int(os.environ.get('PORT', 5000))
-TOKEN = "TELEGRAM_BOT_TOKEN"
+# PORT = int(os.environ.get('PORT', 5000))
+TOKEN = os.environ.get('BOT_TOKEN')
+url = os.environ.get('API_URL_V2')
+algod_token = os.environ.get('ALGODTOKEN')
 
 reply_keyboard = [
     ['/Create_account', '/Get_Mnemonics_from_pky'],
-    ['/Query_account_balance', '/Account_status', /enquire],
+    ['/Query_account_balance', '/Account_status', '/enquire'],
     ['/About', '/help', '/Done'],
 ]
 markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+
+
+def connect():
+    # Using the third party API
+    algod_url = url  # os.environ.get('API_URL_V1')
+    algod_auth = algod_token  # os.environ.get('ALGODTOKEN')
+    headers = {"X-API-Key": algod_token}
+    try:
+        return algod.AlgodClient(algod_auth, algod_url, headers)
+    except Exception as e:
+        print(e)
+
+algod_client = connect()
 
 
 def start(update, context):
