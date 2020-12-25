@@ -4,7 +4,9 @@
 import logging
 from algosdk import account, mnemonic
 from algosdk.v2client import algod
-from telegram import (ReplyKeyboardMarkup, InlineKeyboardButton,  InlineKeyboardMarkup)
+from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
+from telegram.inline.inlinekeyboardbutton import InlineKeyboardButton
+from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
 import time
 import os
 
@@ -45,6 +47,7 @@ def connect():
         return algod.AlgodClient(algod_auth, algod_url, headers)
     except Exception as e:
         print(e)
+
 
 algod_client = connect()
 
